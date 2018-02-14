@@ -24,23 +24,73 @@ func handler(w http.ResponseWriter, req *http.Request) {
 }
 
 func tabunganHandler(rw http.ResponseWriter, req *http.Request) {
+	var res dto.Dto
+
 	body, err := ioutil.ReadAll(req.Body)
 	if err != nil {
 		panic(err)
 	}
-	log.Println(string(body))
 
-	var r dto.TabunganRequest
+	s := string(body)
+	log.Println("Request Body : " + s)
+
+	var r dto.Dto
 	err = json.Unmarshal(body, &r)
 	if err != nil {
 		panic(err)
 	}
 
 	if helper.ValidateRole(r.ClientId, "tabunganemas", "INQUIRY") {
-		services.InquiryTabungan(r)
+		res = services.InquiryTabungan(r, s)
 	} else {
 		log.Fatal("CA tidak memiliki akses tabunganemas")
 	}
+
+	data, err := json.Marshal(res)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("Response Body : " + string(data))
+
+	rw.WriteHeader(200)
+	rw.Header().Set("Content-Type", "application/json")
+	rw.Write(data)
+}
+
+func gadaiHandler(rw http.ResponseWriter, req *http.Request) {
+	var res dto.Dto
+
+	body, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	s := string(body)
+	log.Println("Request Body : " + s)
+
+	var r dto.Dto
+	err = json.Unmarshal(body, &r)
+	if err != nil {
+		panic(err)
+	}
+
+	if helper.ValidateRole(r.ClientId, "gadai", "INQUIRY") {
+		res = services.InquiryGadai(r, s)
+	} else {
+		log.Fatal("CA tidak memiliki akses gadai")
+	}
+
+	data, err := json.Marshal(res)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("Response Body : " + string(data))
+
+	rw.WriteHeader(200)
+	rw.Header().Set("Content-Type", "application/json")
+	rw.Write(data)
 }
 
 func main() {
@@ -51,6 +101,7 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", handler)
 	r.HandleFunc("/tabungan", tabunganHandler)
+	r.HandleFunc("/gadai", gadaiHandler)
 	r.Methods("POST")
 	http.ListenAndServe(":9090", r)
 
@@ -64,4 +115,5 @@ func openConnection() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Success Open Connection")
 }

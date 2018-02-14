@@ -1,25 +1,21 @@
-/*
- * Copyright (c) 2018.
- */
-
 package services
 
 import (
 	"log"
 	"github.com/ivanj4u/apiswitch/dto"
-	"github.com/ivanj4u/apiswitch/util"
+	"fmt"
 	"net/http"
 	"bytes"
-	"fmt"
 	"io/ioutil"
+	"github.com/ivanj4u/apiswitch/util"
 	"encoding/json"
 )
 
-func InquiryTabungan(req dto.Dto, str string) (dto.Dto){
-	log.Println("Start services Inquiry Tabungan : " + req.JenisTransaksi)
+func InquiryGadai(req dto.Dto, str string) (dto.Dto) {
+	log.Println("Start services Inquiry Gadai : " + req.JenisTransaksi)
 	var res dto.Dto
 
-	url := util.UrlKonven + "/tabunganemas/inquiry"
+	url := util.UrlKonven + "/gadai/inquiry"
 	log.Println("URL:>", url)
 
 	r := []byte(str)
@@ -45,6 +41,6 @@ func InquiryTabungan(req dto.Dto, str string) (dto.Dto){
 		log.Panic(err)
 	}
 
-	log.Println("End services Inquiry Tabungan : " + req.JenisTransaksi)
+	log.Println("End services Inquiry Gadai : " + req.JenisTransaksi)
 	return res
 }

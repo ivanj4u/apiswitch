@@ -10,9 +10,9 @@ import (
 )
 
 func ValidateRole(clientId, role, requestType string) (bool) {
-	valid := false
+	valid := true
 
-	rows, err := database.DBCon.Query("SELECT * FROM tbl_rest_ca_role WHERE username = &u AND role = &r AND request_type = &t",
+	rows, err := database.DBCon.Query("SELECT * FROM tbl_rest_ca_role WHERE username = ? AND role = ? AND request_type = ?",
 		clientId, role, requestType)
 	if err != nil {
 		log.Fatal(err)
