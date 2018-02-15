@@ -15,7 +15,7 @@ func InquiryGadai(req dto.Dto, str string) (dto.Dto) {
 	log.Println("Start services Inquiry Gadai : " + req.JenisTransaksi)
 	var res dto.Dto
 
-	url := util.UrlKonven + "/gadai/inquiry"
+	url := util.UrlKonven + "/gadai/" + req.RequestType
 	log.Println("URL:>", url)
 
 	r := []byte(str)

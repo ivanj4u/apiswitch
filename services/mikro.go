@@ -5,25 +5,28 @@
 package services
 
 import (
-	"log"
 	"github.com/ivanj4u/apiswitch/dto"
+	"log"
 	"github.com/ivanj4u/apiswitch/util"
 	"net/http"
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"encoding/json"
 )
 
-func InquiryTabungan(req dto.Dto, str string) (dto.Dto){
-	log.Println("Start services Inquiry Tabungan : " + req.JenisTransaksi)
+func InquiryMikro(req dto.Dto, str string) (dto.Dto){
+	log.Println("Start services Inquiry Mikro : &s", req.JenisTransaksi)
+
 	var res dto.Dto
 
-	url := util.UrlKonven + "/tabunganemas/" + req.RequestType
-	log.Println("URL:>", url)
+	url:= util.UrlKonven + "mikro/" + req.RequestType
+	log.Println("URL :>", url)
 
-	r := []byte(str)
-	coreRequest, err := http.NewRequest("POST", url, bytes.NewBuffer(r))
+	coreRequest, err := http.NewRequest("POST", url, bytes.NewBufferString(str))
+	if err != nil {
+		log.Panic(err)
+	}
+
 	coreRequest.Header.Set("Authorization", util.TokenOauth)
 	coreRequest.Header.Set("Content-Type", "application/json")
 
@@ -34,17 +37,17 @@ func InquiryTabungan(req dto.Dto, str string) (dto.Dto){
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
+	log.Println("resp Status : ", resp.Status)
+	log.Println("resp Header : ", resp.Header)
 
 	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("Response Core :", string(body))
+	log.Println("Response Core : ", string(body))
 
 	err = json.Unmarshal(body, &res)
 	if err != nil {
-		log.Panic(err)
+		log.Println(err)
 	}
 
-	log.Println("End services Inquiry Tabungan : " + req.JenisTransaksi)
+	log.Println("End Services Inquiry Mikro : " + req.JenisTransaksi)
 	return res
 }

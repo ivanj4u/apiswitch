@@ -31,6 +31,7 @@ type Dto struct {
 	PaymentMethod string `json:"paymentMethod,omitempty"`
 	ReffBiller string `json:"reffBiller,omitempty"`
 	ReffSwitching string `json:"reffSwitching,omitempty"`
+	RequestType string `json:"requestType,omitempty"`
 	ResponseCode string `json:"responseCode,omitempty"`
 	ResponseDesc string `json:"responseDesc,omitempty"`
 	StatusKawin string `json:"statusKawin,omitempty"`
